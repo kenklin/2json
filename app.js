@@ -9,7 +9,7 @@
 var $ = require('jquery');
 var express = require('express');
 var app = express();
-var cache = {};	// <url>: <json>
+var cache = {};	// <url>: <obj>
 
 var PATH = '/2json/api';
 var PORT = 8080;
@@ -85,7 +85,7 @@ app.get(PATH, function(req, res) {
 
   if (cache[url] != null) {
     console.log('get("' + url + '") cached');
-    res.send(cache[url]);
+    res.json(cache[url]);
   } else {
     $.get(url, function(data) {
       console.log('get("' + url + '") success');
@@ -99,8 +99,9 @@ app.get(PATH, function(req, res) {
       if (ctx.lines[ctx.lines.length - 1] == '')
         ctx.lines.pop();
       var json = parse_file(ctx);
-      res.send(json);
-      cache[url] = json;
+	  var obj = $.parseJSON(json);
+	  res.json(obj);
+      cache[url] = obj;
     })
     .fail(function(jqXJR, textStatus, errorThrown) {
       console.log('get("' + url + '") failed: ' + textStatus);
