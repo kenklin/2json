@@ -21,20 +21,27 @@
 </head>
 <body id="body">
   <h1>csv.2json.com Demo</h1>
-  This page demonstrates how to use the csv.2json.com web service that transforms CSV files to JSON.<br>
+  This page demonstrates how to use the csv.2json.com web service REST API that transforms CSV files to JSON.<br>
   Github: <a href="http://github.com/kenklin/2json/">http://github.com/kenklin/2json/</a>
   <p>
   <form>
     URL of CSV file to convert: <input type="text" id="csvurl" size="100" value="https://raw.github.com/CityOfPhiladelphia/ppa-data/master/red-light-cameras/red-light-camera-locations.csv"><br>
-    Does CSV file have header:
+    Does CSV file have header record:
     <input type="radio" id="header1" name="hasheader" value="1" checked="checked">1
     <input type="radio" id="header0" name="hasheader" value="0">0<br>
     <button type="button" onclick="csv2json();">Submit jQuery.getJSON()</button>
   </form>
   <p>
-  Use this <a href="http://api.jquery.com/jQuery.getJSON/">jQuery.getJSON()</a> url parameter in your web client:<br>
-  <input type="text" id="csv2jsonurl" size="120" readonly="readonly">
-  <p>
-  <div id="json"></div>
+  <a href="http://api.jquery.com/jQuery.getJSON/">jQuery.getJSON</a>( <em>url</em> [, success(<em>data</em>, textStatus, jqXHR) ] )
+  <table>
+    <tr>
+      <td><em>url</em></td>
+	  <td><input type="text" id="csv2jsonurl" size="120" readonly="readonly"></td>
+    </tr>
+    <tr>
+      <td valign="top"><em>data</em></td>
+      <td valign="top" id="json"></td>
+	</tr>
+  </table>
 </body>
 </html>
