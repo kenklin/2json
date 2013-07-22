@@ -75,23 +75,28 @@ function parse_file(ctx) {
   return json;
 }
 
+function get_cache_key(req) {
+  return req.url + "?header=" + req.query.header;
+}
+
 app.get(PATH, function(req, res) {
   var url = req.query.url != null
     ? req.query.url
     : 'https://raw.github.com/CityOfPhiladelphia/ppa-data/master/red-light-cameras/red-light-camera-locations.csv';
-  var header = req.query.header != null
-    ? req.query.header
-    : header = 0;
-
-  if (cache[url] != null) {
-    console.log('get("' + url + '") cached');
-    res.json(cache[url]);
+  var hasheader = req.query.header != null
+    ? +req.query.header
+    : 0;
+  var key = get_cache_key(req);
+ 
+  if (cache[key] != null) {
+    console.log('get("' + key + '") cached');
+    res.json(cache[key]);
   } else {
     $.get(url, function(data) {
-      console.log('get("' + url + '") success');
+      console.log('get("' + key + '") success');
       var ctx = {
         header: {
-	      names: header ? [] : null,
+	      names: hasheader > 0 ? [] : null,
     	  quote: []
     	},
         lines: data.split(CRLF)
@@ -101,10 +106,10 @@ app.get(PATH, function(req, res) {
       var json = parse_file(ctx);
 	  var obj = $.parseJSON(json);
 	  res.json(obj);
-      cache[url] = obj;
+      cache[key] = obj;
     })
     .fail(function(jqXJR, textStatus, errorThrown) {
-      console.log('get("' + url + '") failed: ' + textStatus);
+      console.log('get("' + key + '") failed: ' + textStatus);
     })
   }
 })
