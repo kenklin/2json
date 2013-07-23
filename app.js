@@ -9,7 +9,7 @@
 var $ = require('jquery');
 var express = require('express');
 var app = express();
-var cache = {};	// <url>: <obj>
+var cache = {};	// <req.query>: <retobj>
 
 var PATH = '/2json/api';
 var PORT = 8080;
@@ -75,8 +75,8 @@ function parse_file(ctx) {
   return json;
 }
 
-function get_cache_key(req) {
-  return req.url + "?header=" + req.query.header;
+function csv2json(ctx) {
+  return $.parseJSON(parse_file(ctx));
 }
 
 app.get(PATH, function(req, res) {
@@ -86,14 +86,21 @@ app.get(PATH, function(req, res) {
   var hasheader = req.query.header != null
     ? +req.query.header
     : 0;
-  var key = get_cache_key(req);
+  var cachekey = JSON.stringify(req.query);
  
-  if (cache[key] != null) {
-    console.log('get("' + key + '") cached');
-    res.json(cache[key]);
+  var retobj = {
+    meta: {
+	  query: cachekey,
+	  cached: false
+	},
+	data: null	// Array of objects representing CSV
+  };
+  if (cache[cachekey] != null) {
+    console.log("get('" + cachekey + "') cached");
+    res.json(cache[cachekey]);
   } else {
     $.get(url, function(data) {
-      console.log('get("' + key + '") success');
+      console.log("get('" + cachekey + "') success");
       var ctx = {
         header: {
 	      names: hasheader > 0 ? [] : null,
@@ -103,13 +110,16 @@ app.get(PATH, function(req, res) {
       };
       if (ctx.lines[ctx.lines.length - 1] == '')
         ctx.lines.pop();
-      var json = parse_file(ctx);
-	  var obj = $.parseJSON(json);
-	  res.json(obj);
-      cache[key] = obj;
+
+      retobj.meta.cached = false;
+	  retobj.data = csv2json(ctx);
+	  res.json(retobj);
+
+	  retobj.meta.cached = true;
+      cache[cachekey] = retobj;
     })
     .fail(function(jqXJR, textStatus, errorThrown) {
-      console.log('get("' + key + '") failed: ' + textStatus);
+      console.log("get('" + key + "') failed: " + textStatus);
     })
   }
 })
