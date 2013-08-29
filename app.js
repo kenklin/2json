@@ -43,7 +43,7 @@ function parse_field(ctx, fields, i) {
     quote = true;
   json += (quote)
     ? '"' + fields[i] + '"'
-	: fields[i];
+    : fields[i];
   return json;
 }
 
@@ -54,7 +54,7 @@ function parse_record(ctx) {
     json += parse_field(ctx, fields, 0);
     for (var i = 1; i < fields.length; i++) {
       json += ',';
-	  json += parse_field(ctx, fields, i);
+      json += parse_field(ctx, fields, i);
     }
   }
   json += '}';
@@ -68,8 +68,8 @@ function parse_file(ctx) {
   var json = '[';
   json += parse_record(ctx);
   while (ctx.lines.length > 0) {
-	json += ',';
-	json += parse_record(ctx);
+    json += ',';
+    json += parse_record(ctx);
   }
   json += ']';
   return json;
@@ -90,10 +90,10 @@ app.get(PATH, function(req, res) {
  
   var retobj = {
     meta: {
-	  query: cachekey,
-	  cached: false
-	},
-	data: null	// Array of objects representing CSV
+      query: cachekey,
+      cached: false
+    },
+    data: null	// Array of objects representing CSV
   };
   if (cache[cachekey] != null) {
     console.log("get('" + cachekey + "') cached");
@@ -103,8 +103,8 @@ app.get(PATH, function(req, res) {
       console.log("get('" + cachekey + "') success");
       var ctx = {
         header: {
-	      names: hasheader > 0 ? [] : null,
-    	  quote: []
+        names: hasheader > 0 ? [] : null,
+        quote: []
     	},
         lines: data.split(CRLF)
       };
@@ -112,10 +112,10 @@ app.get(PATH, function(req, res) {
         ctx.lines.pop();
 
       retobj.meta.cached = false;
-	  retobj.data = csv2json(ctx);
-	  res.json(retobj);
+      retobj.data = csv2json(ctx);
+      res.json(retobj);
 
-	  retobj.meta.cached = true;
+      retobj.meta.cached = true;
       cache[cachekey] = retobj;
     })
     .fail(function(jqXJR, textStatus, errorThrown) {
