@@ -100,23 +100,27 @@ app.get(PATH, function(req, res) {
     res.json(cache[cachekey]);
   } else {
     $.get(url, function(data) {
-      console.log("get('" + cachekey + "') success");
-      var ctx = {
-        header: {
-        names: hasheader > 0 ? [] : null,
-        quote: []
-    	},
-        lines: data.split(CRLF)
-      };
-      if (ctx.lines[ctx.lines.length - 1] == '')
-        ctx.lines.pop();
+      try {
+        var ctx = {
+          header: {
+          names: hasheader > 0 ? [] : null,
+          quote: []
+    	  },
+          lines: data.split(CRLF)
+        };
+        if (ctx.lines[ctx.lines.length - 1] == '')
+          ctx.lines.pop();
 
-      retobj.meta.cached = false;
-      retobj.data = csv2json(ctx);
-      res.json(retobj);
+        retobj.meta.cached = false;
+        retobj.data = csv2json(ctx);
+        res.json(retobj);
+        console.log("get('" + cachekey + "') success");
 
-      retobj.meta.cached = true;
-      cache[cachekey] = retobj;
+        retobj.meta.cached = true;
+        cache[cachekey] = retobj;
+      } catch (err) {
+        console.log("get('" + cachekey + "') Error: " + err.message);
+      }
     })
     .fail(function(jqXJR, textStatus, errorThrown) {
       console.log("get('" + key + "') failed: " + textStatus);
