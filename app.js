@@ -12,7 +12,7 @@ var app = express();
 var cache = {};	// <req.query>: <retobj>
 
 var PATH = '/2json/api';
-var PORT = 8080;
+var PORT = 80;
 var CRLF = '\r\n';
 var COMMA = ',';
 
