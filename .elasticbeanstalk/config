@@ -1,0 +1,13 @@
+[global]
+ApplicationName=2json
+AwsCredentialFile=c:/Users/Ken\.elasticbeanstalk\aws_credential_file
+DevToolsEndpoint=git.elasticbeanstalk.us-east-1.amazonaws.com
+EnvironmentName=2json-env
+EnvironmentType=LoadBalanced
+InstanceProfileName=aws-elasticbeanstalk-ec2-role
+OptionSettingFile=C:\kenlin.com\x\2json\.elasticbeanstalk\optionsettings.2json-env
+RdsEnabled=No
+Region=us-east-1
+ServiceEndpoint=https://elasticbeanstalk.us-east-1.amazonaws.com
+SolutionStack=64bit Amazon Linux running Node.js
+

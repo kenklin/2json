@@ -103,8 +103,8 @@ app.get(PATH, function(req, res) {
       try {
         var ctx = {
           header: {
-          names: hasheader > 0 ? [] : null,
-          quote: []
+            names: hasheader > 0 ? [] : null,
+            quote: []
     	  },
           lines: data.split(CRLF)
         };
