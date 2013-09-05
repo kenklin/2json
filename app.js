@@ -81,10 +81,15 @@ function csv2json(ctx) {
 }
 
 app.get("/", function(req, res) {
-  var body = APP + ' health check';
-  res.setHeader('Content-Type', 'text/plain');
-  res.setHeader('Content-Length', body.length);
-  res.end(body);
+  try {
+    var health = {
+      app: APP,
+      date: new Date().toISOString()
+    };
+    res.json(health);
+  } catch (err) {
+    console.log("get('/' failed: " + err);
+  }
 });
 
 app.get(PATH, function(req, res) {
