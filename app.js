@@ -11,6 +11,7 @@ var express = require('express');
 var app = express();
 var cache = {};	// <req.query>: <retobj>
 
+var APP = '2json';
 var PATH = '/2json/api';
 var PORT = 8081;
 var CRLF = '\r\n';
@@ -78,6 +79,13 @@ function parse_file(ctx) {
 function csv2json(ctx) {
   return $.parseJSON(parse_file(ctx));
 }
+
+app.get("/", function(req, res) {
+  var body = APP + ' health check';
+  res.setHeader('Content-Type', 'text/plain');
+  res.setHeader('Content-Length', body.length);
+  res.end(body);
+});
 
 app.get(PATH, function(req, res) {
   var url = req.query.url != null
